@@ -2,9 +2,9 @@
 // db_config.php
 
 return [
-    'servername' => '92.205.9.207', // Database server
+    'servername' => 'slopetravel-server.mysql.database.azure.com', // Database server
     'username' => 'webuser',         // Database username
-    'password' => '4;Nt]I2(PtoC',   // Database password
-    'dbname' => 'SlopeTravelDB',    // Database name
+    'password' => 'Denis2003',   // Database password
+    'dbname' => 'slopetravel-database',    // Database name
 ];
 ?>
