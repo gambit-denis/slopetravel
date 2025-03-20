@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Invoice</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background-color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .header {
+            text-align: left;
+            justify-content: space-between;
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 5px;
+        }
+
+        .header img {
+            max-width: 150px;
+            margin-bottom: 5px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #983c45;
+            margin: 0;
+        }
+
+        .section {
+            margin-bottom: 15px;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            color: #983c45;
+            margin-bottom: 8px;
+        }
+
+        p, span {
+            margin: 5px 0;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 12px;
+            background-color: #fff;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #983c45;
+            color: white;
+            padding: 5px;
+            text-align: left;
+        }
+
+        td {
+            padding: 3px;
+        }
+
+        tfoot td {
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #444;
+            text-decoration: none;
+        }
+
+        .legal {
+            font-size: 12px;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        .signature {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature div {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .signature div p {
+            margin: 20px 0 0;
+        }
+
+       
+
+    @media print {
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        body, .container {
+        background-color: white !important; /* Ensure the background is white */
+    }
+        .container {
+            margin: 0 auto;
+            padding: 10px;
+            width: 100%;
+            max-width: 100%;
+            border: none;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%; /* Ensure tables fit within the print area */
+        }
+        * {
+            font-size: 11px; /* Adjust font size for better fit */
+        }
+        h1, h3 {
+            font-size: 16px; /* Scale down header sizes */
+        }
+        .legal, .footer {
+            font-size: 10px; /* Scale down legal text and footer */
+        }
+        .print-button {
+                display: none; /* Hide header, footer, and print button when printing */
+            }
+
+        .signature div p {
+            font-size: 12px; /* Scale signature section */
+        }
+        /* Page size and scaling */
+        @page {
+            size: A4; /* Set paper size to A4 (adjust if needed) */
+            margin: 10mm; /* Minimal margins */
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>FATURA</h1>
+            <h1 id="invoiceNumber"></h1>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <div class="section">
+                <p><strong>Data:</strong> <span id="invoiceDate"></span></p>
+                <p><strong>Xhirollogaritë:</strong> <span id="bankAccounts"></span></p>
+            </div>
+    
+            <div class="section">
+                <h3>Klienti:</h3>
+                <p><strong>Emri:</strong> <span id="customerName"></span></p>
+                <p><strong>Nr.Identifikues:</strong> <span id="customerNIT"></span></p>
+                <p><strong>Kontakti:</strong> <span id="customerContact"></span></p>
+                <p><strong>ID:</strong> <span id="customerId"></span></p>
+            </div>
+        </div>
+       
+
+        <div class="section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Kompania</th>
+                        <th>Nr.Unik Identifikues</th>
+                        <th>Nr. Biznesit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="companyName"></td>
+                        <td id="companyNUI"></td>
+                        <td id="companyNRB"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <table aria-label="Invoice Items">
+            <thead>
+                <tr>
+                    <th>Sasia</th>
+                    <th>Përshkrimi</th>
+                    <th>Qmimi</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="invoiceItems"></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Total</td>
+                    <td id="grandTotal"></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="legal">
+            <p>Me pranimin e fatures ju i pranoni Kushtet e Pergjithshme te Udhetimit qe mund ti gjeni ne www.slopetrabel.com/kushtet. Informata me rendesi: 1. Per udhetim pasaporta duhet te kete se paku 6 muaj validitet, Slope Travel nuk merr pergjegjesi ne rast te problemve! . 2. Paisja me Polise per Sigurim Shendetesor ne udhetim nuk eshte obligative dhe mbetet ne pergjegjesi te udhetarit, Slope Travel ju preferon te pajiseni me polise te sigurimit, dhe nuk mer asnje pergjegjesi nese ju nuk keni bere nje gje te tille! 3. Kjo faturë është e vlefshme dhe e pranueshme ne formëelektronike ne bazë te nenit 50 Ligji për TVSH nr .05/L-37</p>
+        </div>
+
+        <div class="signature">
+            <div style="justify-content: left">
+                <p>Authorized Signature</p>
+                 <img style="margin-right: 50px; height: 60px; width: 220px; justify-content: left;" src="images/signature.png" alt="signature">
+            </div>
+            <div style="justify-content: left; text-align: left; margin-right: 50px;">
+                <p>Client Signature</p>
+                <p>____________________</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>+383 49 228 913 | <a href="#">www.slopetravel.com</a></p>
+        </div>
+
+        <button class="print-button" onclick="window.print()">Printo Faturen</button>
+    </div>
+
+    <script>
+        const invoiceData = {
+            invoiceDate: '01.01.2025',
+            invoiceNumber: '#S435345',
+            bankAccounts: `
+            <strong>TEB Bank</strong> 24-10-54541846343422-14
+            <strong>One For</strong> XK058764836357846785
+            <strong>BPB Bank</strong> 63257745764587488
+             `,
+            customerName: 'John Doe',
+            customerNIT: '123456789',
+            customerContact: '+383 49 123 456',
+            customerId: 'C12345',
+            companyName: 'Slope Travel L.L.C.',
+            companyNUI: '812421511',
+            companyNRB: '711865431',
+            items: [
+                { qty: 2, description: 'Shërbimet e aranzhmanit', unitPrice: '200.00', lineTotal: '400.00' },
+                { qty: 1,  description: `
+                Datat dhe orari I Fluturimit: <br>
+                23.01.2025 FR 8312 Tirana – Prague 08:15-10:20 <br>
+                26.01.2025 FR 8311 Prague – Tirana 06:00-07:50 <br>
+                Fluturimi realizohet me Ryan Air. <br>
+                Pa bagazh vetem cante krahu. <br>
+                Akomodimi ne hotel 3 nete: <br>
+                Hoteli: Green Garden Hotel <br>
+                Address: Fugnerovo Namesti 1865/4 Praha 2 120 00 Prague <br>
+                Lloji I sherbimit: fjetje me mengjes <br>
+                Lloji I dhomes: Superior twin room <br>
+                Check in: 23.01.2025 ne ora 14:00 <br>
+                Check out: 26.01.2025 ne ora 12:00 <br>
+                Transferi Aeroport – Hotel – Aeroport dhe taksat e qendrimit nuk përfshihen ne cmim!
+            `, unitPrice: '0.00', lineTotal: '0.00' }
+            ]
+        };
+
+        document.getElementById('invoiceDate').textContent = invoiceData.invoiceDate;
+        document.getElementById('invoiceNumber').textContent = invoiceData.invoiceNumber;
+       // Use innerHTML for bankAccounts to render <br> tags as HTML
+        document.getElementById('bankAccounts').innerHTML = invoiceData.bankAccounts.replace(/\n/g, '<br>');
+
+        document.getElementById('customerName').textContent = invoiceData.customerName;
+        document.getElementById('customerNIT').textContent = invoiceData.customerNIT;
+        document.getElementById('customerContact').textContent = invoiceData.customerContact;
+        document.getElementById('customerId').textContent = invoiceData.customerId;
+        document.getElementById('companyName').textContent = invoiceData.companyName;
+        document.getElementById('companyNUI').textContent = invoiceData.companyNUI;
+        document.getElementById('companyNRB').textContent = invoiceData.companyNRB;
+
+        const invoiceItems = document.getElementById('invoiceItems');
+        let total = 0;
+
+        invoiceData.items.forEach(item => {
+            const row = `
+                <tr>
+                    <td>${item.qty}</td>
+                    <td>${item.description}</td>
+                    <td>${item.unitPrice}</td>
+                    <td>${item.lineTotal}</td>
+                </tr>
+            `;
+            invoiceItems.insertAdjacentHTML('beforeend', row);
+            total += parseFloat(item.lineTotal);
+        });
+
+        document.getElementById('grandTotal').textContent = total.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    </script>
+</body>
+</html>
